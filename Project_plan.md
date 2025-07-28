@@ -1,11 +1,10 @@
----
 
 # ✅ Phase-Wise Plan for Digital Wallet API
 
 ### 🚀 Deadline: **July 31, 2025**
 
-* Target Completion: **July 30, 2025**
-* Buffer: **1 day (July 31)** for documentation, video, and review
+- Target Completion **July 30, 2025**
+- Buffer 1 day **(July 31)** for documentation, video, and review
 
 ---
 
