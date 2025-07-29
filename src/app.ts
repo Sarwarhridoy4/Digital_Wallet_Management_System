@@ -1,10 +1,10 @@
 // src/app.ts
 import express, { Application, Request, Response } from "express";
 import cors from "cors";
-import envConfig from "./config/env";
+import envConfig from "./app/config/env";
 import cookieParser from "cookie-parser";
 import httpStatus from "http-status-codes";
-import notFound from "./middlewares/notFound";
+import notFound from "./app/middlewares/notFound";
 
 const app: Application = express();
 
