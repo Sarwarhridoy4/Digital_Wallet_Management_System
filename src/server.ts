@@ -3,6 +3,7 @@ import { Server } from "http";
 import mongoose from "mongoose";
 import envConfig from "./app/config/env";
 import app from "./app";
+import { seedAdmin } from "./app/utils/seedAdmin";
 
 let server: Server;
 
@@ -21,6 +22,9 @@ const startServer = async () => {
 };
 
 startServer();
+(async () => {
+  await seedAdmin();
+})();
 
 const gracefulShutdown = (signal: string) => {
   console.log(`⚠️ ${signal} received... shutting down gracefully`);

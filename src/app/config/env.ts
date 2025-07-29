@@ -15,13 +15,19 @@ interface EnvConfig {
   JWT_ACCESS_EXPIRES: string;
   JWT_REFRESH_EXPIRES: string;
   BCRYPT_SALT_ROUND: string;
+  ADMIN_EMAIL?: string;
+  ADMIN_PASSWORD?: string;
+  ADMIN_PHONE?: string;
 }
 const envConfig: EnvConfig = {
-  PORT: process.env.PORT || "3000",
-  DB_URL: process.env.DB_URL || "mongodb://localhost:27017/digital_wallet",
+  ADMIN_EMAIL: process.env.ADMIN_EMAIL as string,
+  ADMIN_PASSWORD: process.env.ADMIN_PASSWORD as string,
+  ADMIN_PHONE: process.env.ADMIN_PHONE as string,
+  PORT: process.env.PORT as string,
+  DB_URL: process.env.DB_URL as string,
   NODE_ENV:
     (process.env.NODE_ENV as "development" | "production") || "development",
-  FRONTEND_URL: process.env.FRONTEND_URL || "http://localhost:3000",
+  FRONTEND_URL: process.env.FRONTEND_URL as string,
   CLOUDINARY_CLOUD_NAME: process.env.CLOUDINARY_CLOUD_NAME || "",
   CLOUDINARY_API_KEY: process.env.CLOUDINARY_API_KEY || "",
   CLOUDINARY_API_SECRET: process.env.CLOUDINARY_API_SECRET || "",
