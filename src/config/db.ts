@@ -1,3 +1,4 @@
+/* eslint-disable no-console */
 // src/config/db.ts
 import mongoose from "mongoose";
 import envConfig from "./env";
