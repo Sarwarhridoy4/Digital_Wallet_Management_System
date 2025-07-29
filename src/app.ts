@@ -7,6 +7,7 @@ import cookieParser from "cookie-parser";
 import httpStatus from "http-status-codes";
 import notFound from "./app/middlewares/notFound";
 import { globalErrorHandler } from "./app/middlewares/globalErrorHandler";
+import { router } from "./app/routes";
 
 const app: Application = express();
 
@@ -21,6 +22,10 @@ app.use(
     credentials: true,
   })
 );
+
+// Entry point for routes
+
+app.use("/api/v1", router);
 
 // Application Entry Point
 app.get("/", (_req: Request, res: Response) => {
