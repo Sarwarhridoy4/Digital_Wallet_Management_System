@@ -10,6 +10,11 @@ interface EnvConfig {
   CLOUDINARY_CLOUD_NAME: string;
   CLOUDINARY_API_KEY: string;
   CLOUDINARY_API_SECRET: string;
+  JWT_ACCESS_SECRET: string;
+  JWT_REFRESH_SECRET: string;
+  JWT_ACCESS_EXPIRES: string;
+  JWT_REFRESH_EXPIRES: string;
+  BCRYPT_SALT_ROUND: string;
 }
 const envConfig: EnvConfig = {
   PORT: process.env.PORT || "3000",
@@ -20,5 +25,10 @@ const envConfig: EnvConfig = {
   CLOUDINARY_CLOUD_NAME: process.env.CLOUDINARY_CLOUD_NAME || "",
   CLOUDINARY_API_KEY: process.env.CLOUDINARY_API_KEY || "",
   CLOUDINARY_API_SECRET: process.env.CLOUDINARY_API_SECRET || "",
+  JWT_ACCESS_SECRET: process.env.JWT_ACCESS_SECRET || "access_secret",
+  JWT_REFRESH_SECRET: process.env.JWT_REFRESH_SECRET || "refresh_secret",
+  JWT_ACCESS_EXPIRES: process.env.JWT_ACCESS_EXPIRES || "1d",
+  JWT_REFRESH_EXPIRES: process.env.JWT_REFRESH_EXPIRES || "30d",
+  BCRYPT_SALT_ROUND: process.env.BCRYPT_SALT_ROUND || "10",
 };
 export default envConfig;

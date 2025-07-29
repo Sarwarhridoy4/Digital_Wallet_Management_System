@@ -13,15 +13,17 @@ export enum UserStatus {
   BLOCKED = "BLOCKED",
 }
 export enum verifyStatus {
-    PENDING = "PENDING",
-    VERIFIED = "VERIFIED",
-    REJECTED = "REJECTED",
-    EXPIRED = "EXPIRED",
+  PENDING = "PENDING",
+  VERIFIED = "VERIFIED",
+  REJECTED = "REJECTED",
+  EXPIRED = "EXPIRED",
 }
 
 export enum IdentifierType {
-  NID = 'NID',
-  BIRTH_CERTIFICATE = 'BIRTH_CERTIFICATE',
+  NID = "NID",
+  BIRTH_CERTIFICATE = "BIRTH_CERTIFICATE",
 }
+
+// src/types/index.ts or wherever your shared types live
 
 export const bdPhoneRegex = /^(\+8801|01)[0-9]{9}$/;
