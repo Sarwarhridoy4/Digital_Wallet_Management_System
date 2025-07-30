@@ -30,7 +30,7 @@ app.use("/api/v1", router);
 // Application Entry Point
 app.get("/", (_req: Request, res: Response) => {
   res.status(200).json({
-    message: "Welcome to the Digital Wallet Management System API",
+    message: "Welcome to the Dream Wallet API",
     status: httpStatus.OK,
     data: {
       version: "1.0.0",
