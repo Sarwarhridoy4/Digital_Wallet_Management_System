@@ -7,7 +7,10 @@ import { Role, UserStatus, verifyStatus } from "../../types";
 import bcrypt from "bcrypt";
 import AppError from "../../errorHelpers/AppError";
 import httpStatus from "http-status-codes";
-import { uploadBufferToCloudinary } from "../../config/cloudinary.config";
+import {
+  deleteImageFromCloudinary,
+  uploadBufferToCloudinary,
+} from "../../config/cloudinary.config";
 import envConfig from "../../config/env";
 import { TransactionType } from "../transaction/transaction.constant";
 import { INITIAL_BALANCE } from "./user.constant";
@@ -54,14 +57,14 @@ const createUser = async (
     );
 
     // Upload profile picture (optional)
-    let uploadedImageUrl = "";
+    let profileImageUrl = "";
     if (profileBuffer && profileOriginalName) {
-      const cloudinaryRes = await uploadBufferToCloudinary(
+      const profile_image = await uploadBufferToCloudinary(
         profileBuffer,
         profileOriginalName,
         "profile-pictures"
       );
-      uploadedImageUrl = cloudinaryRes?.secure_url || "";
+      profileImageUrl = profile_image?.secure_url || "";
     }
 
     // Upload identifier (required)
@@ -89,13 +92,17 @@ const createUser = async (
           role: role || Role.USER,
           status: UserStatus.ACTIVE,
           verified: verifyStatus.PENDING,
-          profile_picture: uploadedImageUrl,
+          profile_picture: profileImageUrl,
           identifier,
           identifier_image: kycImage.secure_url,
         },
       ],
       { session }
     );
+    if (!newUser) {
+      await deleteImageFromCloudinary(profileImageUrl);
+      await deleteImageFromCloudinary(kycImage.secure_url);
+    }
 
     // ✅ Step 2: Create wallet
     await Wallet.create(
