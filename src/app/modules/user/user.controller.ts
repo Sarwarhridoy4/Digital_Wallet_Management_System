@@ -3,6 +3,7 @@ import { catchAsync } from "../../utils/catchAsync";
 import httpStatus from "http-status-codes";
 import { sendResponse } from "../../utils/sendResponse";
 import { UserServices } from "./user.service";
+import { UserStatus } from "../../types";
 
 const createUser = catchAsync(async (req: Request, res: Response) => {
   const files = req.files as Record<string, Express.Multer.File[]> | undefined;
@@ -27,10 +28,81 @@ const createUser = catchAsync(async (req: Request, res: Response) => {
     success: true,
     statusCode: httpStatus.CREATED,
     message: "User Created Successfully",
-    data: user
+    data: user,
+  });
+});
+
+const getAllUsers = catchAsync(async (req, res) => {
+  const query = Object.fromEntries(
+    Object.entries(req.query).map(([key, value]) => [
+      key,
+      Array.isArray(value) ? value.join(",") : String(value),
+    ])
+  ) as Record<string, string>;
+  const result = await UserServices.getAllUsers(query);
+  sendResponse(res, {
+    statusCode: httpStatus.OK,
+    success: true,
+    message: "Users and agents fetched successfully",
+    data: result.data,
+    meta: result.meta,
+  });
+});
+
+const blockUserWallet = catchAsync(async (req, res) => {
+  const result = await UserServices.updateUserStatus(
+    req.params.id,
+    UserStatus.BLOCKED
+  );
+  sendResponse(res, {
+    statusCode: httpStatus.OK,
+    success: true,
+    message: "User wallet blocked",
+    data: result,
+  });
+});
+
+const unblockUserWallet = catchAsync(async (req, res) => {
+  const result = await UserServices.updateUserStatus(
+    req.params.id,
+    UserStatus.ACTIVE
+  );
+  sendResponse(res, {
+    statusCode: httpStatus.OK,
+    success: true,
+    message: "User wallet unblocked",
+    data: result,
+  });
+});
+
+const approveAgent = catchAsync(async (req, res) => {
+  const result = await UserServices.approveAgent(req.params.id);
+  sendResponse(res, {
+    statusCode: httpStatus.OK,
+    success: true,
+    message: "Agent approved",
+    data: result,
+  });
+});
+
+const suspendAgent = catchAsync(async (req, res) => {
+  const result = await UserServices.updateUserStatus(
+    req.params.id,
+    UserStatus.SUSPENDED
+  );
+  sendResponse(res, {
+    statusCode: httpStatus.OK,
+    success: true,
+    message: "Agent suspended",
+    data: result,
   });
 });
 
 export const UserControllers = {
   createUser,
+  getAllUsers,
+  blockUserWallet,
+  unblockUserWallet,
+  approveAgent,
+  suspendAgent,
 };

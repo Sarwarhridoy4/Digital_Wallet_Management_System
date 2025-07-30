@@ -11,8 +11,8 @@ import { uploadBufferToCloudinary } from "../../config/cloudinary.config";
 import envConfig from "../../config/env";
 import { TransactionType } from "../transaction/transaction.constant";
 import { INITIAL_BALANCE } from "./user.constant";
-
-
+import { QueryBuilder } from "../../utils/QueryBuilders";
+import { userSearchableFields } from "../../../constants";
 
 const createUser = async (
   payload: Partial<IUser>,
@@ -134,6 +134,56 @@ const createUser = async (
   }
 };
 
+const getAllUsers = async (query: Record<string, string>) => {
+  const initialQuery = User.find({ role: { $in: [Role.USER, Role.AGENT] } });
+
+  const queryBuilder = new QueryBuilder(initialQuery, query);
+
+  const usersData = queryBuilder
+    .filter()
+    .search(userSearchableFields)
+    .sort()
+    .fields()
+    .paginate();
+
+  const [data, meta] = await Promise.all([
+    usersData.build(),
+    queryBuilder.getMeta(),
+  ]);
+
+  return {
+    data,
+    meta,
+  };
+};
+
+const updateUserStatus = async (userId: string, status: UserStatus) => {
+  const user = await User.findById(userId);
+  if (!user) {
+    throw new AppError(httpStatus.NOT_FOUND, "User not found");
+  }
+
+  user.status = status;
+  return user.save();
+};
+
+const approveAgent = async (userId: string) => {
+  const user = await User.findById(userId);
+  if (!user || user.role !== Role.AGENT) {
+    throw new AppError(
+      httpStatus.BAD_REQUEST,
+      "Agent not found or invalid role"
+    );
+  }
+
+  user.verified = verifyStatus.VERIFIED;
+  user.status = UserStatus.ACTIVE;
+  return user.save();
+};
+
 export const UserServices = {
   createUser,
+  getAllUsers,
+  updateUserStatus,
+  approveAgent,
 };
