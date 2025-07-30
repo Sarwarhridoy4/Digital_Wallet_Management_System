@@ -2,6 +2,7 @@
 
 import bcrypt from "bcrypt";
 import { User } from "../modules/user/user.model";
+import { Wallet } from "../modules/wallet/wallet.model"; // ✅ import Wallet model
 import { Role, UserStatus, IdentifierType, verifyStatus } from "../types";
 import envConfig from "../config/env";
 
@@ -23,6 +24,7 @@ export const seedAdmin = async () => {
         "ADMIN_PASSWORD is not defined in environment variables."
       );
     }
+
     const hashedPassword = await bcrypt.hash(
       envConfig.ADMIN_PASSWORD,
       Number(envConfig.BCRYPT_SALT_ROUND)
@@ -43,7 +45,14 @@ export const seedAdmin = async () => {
 
     const superAdmin = await User.create(payload);
 
-    console.log("✅ Admin Created Successfully!\n");
+    // ✅ Create Wallet for Admin
+    await Wallet.create({
+      user: superAdmin._id,
+      balance: 50, // or set a custom admin starting balance
+      status: "ACTIVE",
+    });
+
+    console.log("✅ Admin & Wallet Created Successfully!\n");
     console.log(superAdmin);
   } catch (error) {
     console.error("❌ Failed to create Admin:", error);

@@ -37,7 +37,7 @@ export const TransactionControllers = {
     const agentId = req.user?.userId;
     const amount = req.body.amount;
     const userPhone = req.body.userPhone;
-    const result = await TransactionService.cashIn(agentId, amount, userPhone);
+    const result = await TransactionService.cashIn(agentId, userPhone, amount);
     sendResponse(res, {
       success: true,
       statusCode: httpStatus.CREATED,
@@ -49,7 +49,8 @@ export const TransactionControllers = {
   cashOut: catchAsync(async (req: Request, res: Response) => {
     const agentId = req.user?.userId;
     const amount = req.body.amount;
-    const result = await TransactionService.cashOut(agentId, amount, req.body);
+    const userPhone = req.body.userPhone;
+    const result = await TransactionService.cashOut(agentId, userPhone, amount);
     sendResponse(res, {
       success: true,
       statusCode: httpStatus.CREATED,
