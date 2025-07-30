@@ -10,14 +10,7 @@ router.get(
   WalletController.viewMyWallet
 );
 
-import { WalletValidation } from "./wallet.validation";
-import { validateRequest } from "../../middlewares/validateRequest";
-
-router.patch(
-  "/top-up",
-  checkAuth(Role.USER),
-  WalletController.topUpWallet
-);
+router.patch("/top-up", checkAuth(Role.USER), WalletController.topUpWallet);
 
 router.patch(
   "/withdraw",
@@ -25,12 +18,7 @@ router.patch(
   WalletController.withdrawFromWallet
 );
 
-router.patch(
-  "/send",
-  checkAuth(Role.USER),
-  validateRequest(WalletValidation.sendMoneySchema),
-  WalletController.sendMoney
-);
+router.patch("/send", checkAuth(Role.USER), WalletController.sendMoney);
 
 router.get("/", checkAuth(Role.ADMIN), WalletController.viewAllWallets);
 export const WalletRoutes = router;

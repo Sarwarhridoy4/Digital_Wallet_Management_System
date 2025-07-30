@@ -3,7 +3,7 @@
 export enum TransactionType {
   ADD = "add-money",
   WITHDRAW = "withdraw",
-  SEND = "send",
+  SEND = "send-money",
   CASH_IN = "cash-in",
   CASH_OUT = "cash-out",
 }
