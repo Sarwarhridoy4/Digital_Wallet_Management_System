@@ -12,7 +12,7 @@ export const checkAuth =
   (...authRoles: string[]) =>
   async (req: Request, _res: Response, next: NextFunction) => {
     try {
-      const accessToken = req.headers.authorization;
+      const accessToken = req.cookies?.accessToken;
 
       if (!accessToken) {
         throw new AppError(403, "No Token Received");

@@ -4,8 +4,6 @@ import { Router } from "express";
 import { checkAuth } from "../../middlewares/authCheck";
 import { Role } from "../../types";
 import { TransactionControllers } from "./transaction.controller";
-import { TransactionValidation } from "./transaction.validation";
-import { validateRequest } from "../../middlewares/validateRequest";
 
 const router = Router();
 
@@ -17,20 +15,10 @@ router.get(
 );
 
 // 💵 Agent: Cash-in
-router.post(
-  "/cash-in",
-  checkAuth(Role.AGENT),
-  validateRequest(TransactionValidation.cashInSchema),
-  TransactionControllers.cashIn
-);
+router.post("/cash-in", checkAuth(Role.AGENT), TransactionControllers.cashIn);
 
 // 💸 Agent: Cash-out
-router.post(
-  "/cash-out",
-  checkAuth(Role.AGENT),
-  validateRequest(TransactionValidation.cashOutSchema),
-  TransactionControllers.cashOut
-);
+router.post("/cash-out", checkAuth(Role.AGENT), TransactionControllers.cashOut);
 
 // 🧑‍💼 Admin: View all transactions (with filters)
 router.get(

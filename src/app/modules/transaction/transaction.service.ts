@@ -51,6 +51,7 @@ const cashIn = async (agentId: string, userPhone: string, amount: number) => {
   }
 
   const agentWallet = await checkWallet(agentId);
+
   const user = await User.findOne({ phone: userPhone });
 
   if (!user) {
