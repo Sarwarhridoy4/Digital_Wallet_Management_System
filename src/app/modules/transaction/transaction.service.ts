@@ -14,7 +14,7 @@ const checkWallet = async (userId: string) => {
     throw new AppError(httpStatus.NOT_FOUND, "Wallet not found");
   }
 
-  if (wallet.isBlocked === WalletStatus.BLOCKED) {
+  if (wallet.status === WalletStatus.BLOCKED) {
     throw new AppError(httpStatus.FORBIDDEN, "Wallet is blocked");
   }
 
