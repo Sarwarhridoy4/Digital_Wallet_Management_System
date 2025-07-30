@@ -16,14 +16,12 @@ import { validateRequest } from "../../middlewares/validateRequest";
 router.patch(
   "/top-up",
   checkAuth(Role.USER),
-  validateRequest(WalletValidation.topUpSchema),
   WalletController.topUpWallet
 );
 
 router.patch(
   "/withdraw",
   checkAuth(Role.USER),
-  validateRequest(WalletValidation.withdrawSchema),
   WalletController.withdrawFromWallet
 );
 
