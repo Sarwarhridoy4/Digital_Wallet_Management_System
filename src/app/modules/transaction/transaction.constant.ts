@@ -1,7 +1,7 @@
 // src/types/index.ts or wherever your shared types live
 
 export enum TransactionType {
-  ADD = "add",
+  ADD = "add-money",
   WITHDRAW = "withdraw",
   SEND = "send",
   CASH_IN = "cash-in",

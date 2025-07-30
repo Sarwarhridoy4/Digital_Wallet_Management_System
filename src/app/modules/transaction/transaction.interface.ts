@@ -1,5 +1,3 @@
-// src/app/modules/transaction/transaction.interface.ts
-
 import { Types } from "mongoose";
 import { TransactionStatus, TransactionType } from "./transaction.constant";
 
@@ -9,6 +7,9 @@ export interface ITransaction {
   receiver: Types.ObjectId;
   amount: number;
   status: TransactionStatus;
+  fee: number; // Required
+  commission: number; // Required (0 if not agent)
   notes?: string;
-  timestamp?: Date;
+  createdAt: Date;
+  updatedAt: Date;
 }

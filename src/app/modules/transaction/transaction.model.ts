@@ -1,6 +1,4 @@
-// src/app/modules/transaction/transaction.model.ts
-
-import { Schema, model } from "mongoose";
+import { model, Schema } from "mongoose";
 import { ITransaction } from "./transaction.interface";
 import { TransactionStatus, TransactionType } from "./transaction.constant";
 
@@ -19,8 +17,17 @@ const transactionSchema = new Schema<ITransaction>(
       enum: Object.values(TransactionStatus),
       default: TransactionStatus.SUCCESS,
     },
+    fee: {
+      type: Number,
+      required: true,
+      default: 0,
+    },
+    commission: {
+      type: Number,
+      required: true,
+      default: 0,
+    },
     notes: { type: String },
-    timestamp: { type: Date, default: Date.now },
   },
   {
     timestamps: true,
