@@ -5,7 +5,7 @@ import { WalletStatus } from "../../types";
 import { User } from "../user/user.model";
 
 const checkWalletValid = async (userId: string) => {
-  const wallet = await Wallet.findOne({ userId });
+  const wallet = await Wallet.findOne({ user: userId });
 
   if (!wallet) {
     throw new AppError(httpStatus.NOT_FOUND, "Wallet not found");
@@ -81,7 +81,7 @@ const sendMoney = async (
 };
 
 const getAllWallets = async () => {
-  return Wallet.find({})
+  return Wallet.find({});
 };
 
 export const WalletService = {
