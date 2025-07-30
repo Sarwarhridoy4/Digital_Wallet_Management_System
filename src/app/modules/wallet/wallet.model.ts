@@ -15,7 +15,7 @@ const walletSchema = new Schema<IWallet>(
       required: true,
       default: 50, // default balance on user registration
     },
-    isBlocked: {
+    status: {
       type: String,
       enum: Object.values(WalletStatus),
       default: WalletStatus.ACTIVE,

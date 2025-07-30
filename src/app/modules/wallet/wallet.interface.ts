@@ -4,7 +4,7 @@ import { WalletStatus } from "../../types";
 export interface IWallet {
   user: Types.ObjectId; // Reference to User
   balance: number; // Available balance
-  isBlocked: WalletStatus; // Whether wallet is blocked
+  status: WalletStatus; // Whether wallet is blocked
   createdAt?: Date; // Auto timestamp
   updatedAt?: Date; // Auto timestamp
 }
