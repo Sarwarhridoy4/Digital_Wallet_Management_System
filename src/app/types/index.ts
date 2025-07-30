@@ -23,6 +23,10 @@ export enum IdentifierType {
   NID = "NID",
   BIRTH_CERTIFICATE = "BIRTH_CERTIFICATE",
 }
+export enum WalletStatus {
+  ACTIVE = "ACTIVE",
+  BLOCKED = "BLOCKED",
+}
 
 // src/types/index.ts or wherever your shared types live
 

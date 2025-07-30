@@ -1,5 +1,6 @@
 import { Schema, model } from "mongoose";
 import { IWallet } from "./wallet.interface";
+import { WalletStatus } from "../../types";
 
 const walletSchema = new Schema<IWallet>(
   {
@@ -15,8 +16,9 @@ const walletSchema = new Schema<IWallet>(
       default: 50, // default balance on user registration
     },
     isBlocked: {
-      type: Boolean,
-      default: false,
+      type: String,
+      enum: Object.values(WalletStatus),
+      default: WalletStatus.ACTIVE,
     },
   },
   {

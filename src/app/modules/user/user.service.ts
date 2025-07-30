@@ -13,9 +13,9 @@ import {
 } from "../../config/cloudinary.config";
 import envConfig from "../../config/env";
 import { TransactionType } from "../transaction/transaction.constant";
-import { INITIAL_BALANCE } from "./user.constant";
 import { QueryBuilder } from "../../utils/QueryBuilders";
 import { userSearchableFields } from "../../../constants";
+import { INITIAL_BALANCE } from "../wallet/wallet.constant";
 
 const createUser = async (
   payload: Partial<IUser>,
