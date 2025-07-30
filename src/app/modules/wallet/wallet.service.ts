@@ -4,7 +4,6 @@ import { Wallet } from "./wallet.model";
 import { WalletStatus } from "../../types";
 import { User } from "../user/user.model";
 
-
 const checkWalletValid = async (userId: string) => {
   const wallet = await Wallet.findOne({ userId });
 
@@ -48,7 +47,11 @@ const withdraw = async (userId: string, amount: number) => {
   return wallet.save();
 };
 
-const sendMoney = async (senderId: string, receiverPhone: string, amount: number) => {
+const sendMoney = async (
+  senderId: string,
+  receiverPhone: string,
+  amount: number
+) => {
   if (amount <= 0) {
     throw new AppError(httpStatus.BAD_REQUEST, "Amount must be greater than 0");
   }
@@ -78,7 +81,7 @@ const sendMoney = async (senderId: string, receiverPhone: string, amount: number
 };
 
 const getAllWallets = async () => {
-  return Wallet.find().populate("userId", "name email phone role");
+  return Wallet.find({})
 };
 
 export const WalletService = {
