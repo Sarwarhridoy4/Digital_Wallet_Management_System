@@ -43,7 +43,7 @@ const getAllUsers = catchAsync(async (req, res) => {
   sendResponse(res, {
     statusCode: httpStatus.OK,
     success: true,
-    message: "Users and agents fetched successfully",
+    message: "Users and agents fetched successfully by admin",
     data: result.data,
     meta: result.meta,
   });
@@ -57,7 +57,7 @@ const blockUserWallet = catchAsync(async (req, res) => {
   sendResponse(res, {
     statusCode: httpStatus.OK,
     success: true,
-    message: "User wallet blocked",
+    message: "User wallet blocked by admin",
     data: result,
   });
 });
@@ -70,7 +70,7 @@ const unblockUserWallet = catchAsync(async (req, res) => {
   sendResponse(res, {
     statusCode: httpStatus.OK,
     success: true,
-    message: "User wallet unblocked",
+    message: "User wallet unblocked by admin",
     data: result,
   });
 });
@@ -80,7 +80,7 @@ const approveAgent = catchAsync(async (req, res) => {
   sendResponse(res, {
     statusCode: httpStatus.OK,
     success: true,
-    message: "Agent approved",
+    message: "Agent/User approved by admin",
     data: result,
   });
 });
@@ -93,7 +93,7 @@ const suspendAgent = catchAsync(async (req, res) => {
   sendResponse(res, {
     statusCode: httpStatus.OK,
     success: true,
-    message: "Agent suspended",
+    message: "Agent suspended by admin",
     data: result,
   });
 });

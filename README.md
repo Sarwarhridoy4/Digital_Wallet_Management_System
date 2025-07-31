@@ -21,6 +21,20 @@ ADMIN_EMAIL=admin@example.com
 ADMIN_PASSWORD=supersecurepassword
 ```
 
+# User Credentials( Active For Testing)
+
+```code
+USER_EMAIL=yaxelop525@devdigs.com
+ADMIN_PASSWORD=StrongP@ssw0rd
+```
+
+# Agent Credentials( Active For Testing)
+
+```code
+USER_EMAIL=caditir829@coursora.com
+ADMIN_PASSWORD=StrongP@ssw0rd
+```
+
 ## 🔒 Authentication
 
 ### Register User/Agent
