@@ -1,6 +1,6 @@
 # Digital Wallet Management System API Documentation
 
-**Base URL:** `http://localhost:5000/api/v1`
+**Base URL:** `https://digital-wallet-management-system-kappa.vercel.app/api/v1`
 
 A secure, role-based digital wallet API built with **Express.js (TypeScript)** and **MongoDB (Mongoose)**. The system supports three roles: **Users**, **Agents**, and **Admins**. Users can manage their wallets (top-up, send, withdraw), agents can perform cash-in/out transactions (with commission), and admins have full control over users, agents, wallets, and transaction records. The API enables features like user registration/login, wallet management, transaction history, agent verification, and account blocking. All endpoints enforce authentication (JWT) and role-based authorization.
 
@@ -88,8 +88,6 @@ _Response (JSON):_
   "refreshToken": "<new JWT refresh token>"
 }
 ```
-
-
 
 ### Logout
 
