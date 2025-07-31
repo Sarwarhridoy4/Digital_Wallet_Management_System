@@ -153,24 +153,24 @@ These middleware functions protect all routes so that only properly authenticate
 All of the following endpoints require an **admin** role.
 
 - **Get All Users & Agents:**
-  `GET /api/v1/users`
+  `GET /api/v1/user`
 
   - Returns a list of all user and agent accounts (excluding sensitive fields like passwords).
 
 - **Approve Agent or User:**
-  `PATCH /api/v1/users/:id/approve`
+  `PATCH /api/v1/user/:id/approve`
 
   - Marks an agent or user as **verified/approved** (depending on role).
   - Use this to activate pending agents or verify new user accounts.
 
 - **Suspend Agent or User:**
-  `PATCH /api/v1/users/:id/suspend`
+  `PATCH /api/v1/user/:id/suspend`
 
   - Suspends an agent or user (sets status to suspended, preventing login or transactions).
 
 - **Block/Unblock Wallet:**
-  `PATCH /api/v1/users/:id/block` – Block user’s wallet (freeze transactions).
-  `PATCH /api/v1/users/:id/unblock` – Unblock user’s wallet (re-enable transactions).
+  `PATCH /api/v1/user/:id/block` – Block user’s wallet (freeze transactions).
+  `PATCH /api/v1/user/:id/unblock` – Unblock user’s wallet (re-enable transactions).
 
 These actions allow the admin to control who can transact. For example, blocking an account disables its wallet entirely.
 
@@ -179,24 +179,24 @@ These actions allow the admin to control who can transact. For example, blocking
 Authenticated **Users** (and agents, where applicable) can manage their wallets. Admins can list all wallets.
 
 - **Get Own Wallet:**
-  `GET /api/v1/wallets/me`
+  `GET /api/v1/wallet/me`
 
   - Returns the authenticated user’s wallet details (balance, status, etc.).
 
 - **Top-up Wallet:**
-  `PATCH /api/v1/wallets/top-up`
+  `PATCH /api/v1/wallet/top-up`
   _Body_: `{ "amount": 500 }`
 
   - Adds the specified amount to the user’s wallet balance. (E.g. a user deposits money into their account.)
 
 - **Withdraw from Wallet:**
-  `PATCH /api/v1/wallets/withdraw`
+  `PATCH /api/v1/wallet/withdraw`
   _Body_: `{ "amount": 200 }`
 
   - Subtracts the specified amount from the wallet (if sufficient balance). This could represent transferring money to a bank or external account.
 
 - **Send Money:**
-  `PATCH /api/v1/wallets/send`
+  `PATCH /api/v1/wallet/send`
   _Body_:
 
   ```json
@@ -209,7 +209,7 @@ Authenticated **Users** (and agents, where applicable) can manage their wallets.
   - Transfers the specified amount from the sender’s wallet to another user’s wallet (identified by phone number).
 
 - **Admin: Get All Wallets:**
-  `GET /api/v1/wallets`
+  `GET /api/v1/wallet`
 
   - Admin endpoint that returns all wallets in the system. Useful for monitoring and audits.
 
@@ -218,17 +218,17 @@ Authenticated **Users** (and agents, where applicable) can manage their wallets.
 This tracks all wallet transactions. Roles:
 
 - **User/Agent (self) Transaction History:**
-  `GET /api/v1/transactions/me`
+  `GET /api/v1/transaction/me`
 
   - Returns all transactions (cash-in, cash-out, sends, etc.) related to the authenticated user or agent. Agents see transactions they facilitated; users see their own history.
 
 - **Admin: Get All Transactions:**
-  `GET /api/v1/transactions`
+  `GET /api/v1/transaction`
 
   - Returns every transaction in the system (across all users and agents).
 
 - **Cash-in (Agent):**
-  `POST /api/v1/transactions/cash-in`
+  `POST /api/v1/transaction/cash-in`
   _Body_:
 
   ```json
@@ -241,7 +241,7 @@ This tracks all wallet transactions. Roles:
   - Agent deposits cash into a user’s wallet. The agent’s own wallet balance **decreases** (by amount + commission), and the user’s balance increases by the amount. A small commission is deducted.
 
 - **Cash-out (Agent):**
-  `POST /api/v1/transactions/cash-out`
+  `POST /api/v1/transaction/cash-out`
   _Body_:
 
   ```json
@@ -267,22 +267,22 @@ This tracks all wallet transactions. Roles:
 | `/auth/register`         |  POST  |     –      |       201       | Register a new user or agent       |
 | `/auth/login`            |  POST  |     –      |       200       | Login and return JWT tokens        |
 | `/auth/forgot-password`  |  POST  |     –      |       200       | Send password reset email          |
-| `/wallets/me`            |  GET   |    user    |       200       | View own wallet details            |
-| `/wallets/top-up`        | PATCH  |    user    |       200       | Add funds to own wallet            |
-| `/wallets/withdraw`      | PATCH  |    user    |       200       | Withdraw funds from own wallet     |
-| `/wallets/send`          | PATCH  |    user    |       200       | Send funds to another user         |
-| `/wallets`               |  GET   |   admin    |       200       | List all wallets (admin only)      |
-| `/users`                 |  GET   |   admin    |       200       | List all users and agents          |
-| `/users/:id/block`       | PATCH  |   admin    |       200       | Block a user’s wallet              |
-| `/users/:id/unblock`     | PATCH  |   admin    |       200       | Unblock a user’s wallet            |
-| `/users/:id/approve`     | PATCH  |   admin    |       200       | Approve a pending agent or user    |
-| `/users/:id/suspend`     | PATCH  |   admin    |       200       | Suspend an agent or user           |
-| `/transactions/me`       |  GET   | user/agent |       200       | View own transaction history       |
-| `/transactions`          |  GET   |   admin    |       200       | List all transactions (admin only) |
-| `/transactions/cash-in`  |  POST  |   agent    |       200       | Agent deposits cash into user      |
-| `/transactions/cash-out` |  POST  |   agent    |       200       | Agent withdraws cash for user      |
+| `/wallet/me`            |  GET   |    user    |       200       | View own wallet details            |
+| `/wallet/top-up`        | PATCH  |    user    |       200       | Add funds to own wallet            |
+| `/wallet/withdraw`      | PATCH  |    user    |       200       | Withdraw funds from own wallet     |
+| `/wallet/send`          | PATCH  |    user    |       200       | Send funds to another user         |
+| `/wallet`               |  GET   |   admin    |       200       | List all wallets (admin only)      |
+| `/user`                 |  GET   |   admin    |       200       | List all users and agents          |
+| `/user/:id/block`       | PATCH  |   admin    |       200       | Block a user’s wallet              |
+| `/user/:id/unblock`     | PATCH  |   admin    |       200       | Unblock a user’s wallet            |
+| `/user/:id/approve`     | PATCH  |   admin    |       200       | Approve a pending agent or user    |
+| `/user/:id/suspend`     | PATCH  |   admin    |       200       | Suspend an agent or user           |
+| `/transaction/me`       |  GET   | user/agent |       200       | View own transaction history       |
+| `/transaction`          |  GET   |   admin    |       200       | List all transactions (admin only) |
+| `/transaction/cash-in`  |  POST  |   agent    |       200       | Agent deposits cash into user      |
+| `/transaction/cash-out` |  POST  |   agent    |       200       | Agent withdraws cash for user      |
 
-Each test case assumes valid authentication (JWT) and, where applicable, the correct role. For example, only admins can call `/users` or `/wallets` (all users), and only agents can call `/transactions/cash-in` or `/cash-out`.
+Each test case assumes valid authentication (JWT) and, where applicable, the correct role. For example, only admins can call `/users` or `/wallets` (all users), and only agents can call `/transaction/cash-in` or `/cash-out`.
 
 ## 📄 Environment Variables
 
