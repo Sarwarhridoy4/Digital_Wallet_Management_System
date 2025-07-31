@@ -47,7 +47,7 @@ _Request Body (form data):_
 {
   "name": "Jane Doe",
   "email": "jane@example.com",
-  "phone": "017XXXXXXXX", // or +880xxxxxxxxxx
+  "phone": "017XXXXXXXX", // or +880xxxxxxxxxx(unique)
   "password": "strongPassword",
   "identifier": "NID", // NID or BIRTH_CERTIFICATE
   "identifier_image": "", // Image less than 2 MB for KYC (Required)
