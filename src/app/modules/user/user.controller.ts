@@ -76,7 +76,7 @@ const unblockUserWallet = catchAsync(async (req, res) => {
 });
 
 const approveAgent = catchAsync(async (req, res) => {
-  const result = await UserServices.approveAgent(req.params.id);
+  const result = await UserServices.approveAgentOrUser(req.params.id);
   sendResponse(res, {
     statusCode: httpStatus.OK,
     success: true,
