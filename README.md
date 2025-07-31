@@ -14,6 +14,13 @@ A secure, role-based digital wallet API built with **Express.js (TypeScript)** a
 - **Configuration:** **dotenv** for environment variables.
 - **Admin Credentials:** Environment-configured admin account (email/phone/password) for initial setup.
 
+# Admin Credentials(For Testing)
+
+```code
+ADMIN_EMAIL=admin@example.com
+ADMIN_PASSWORD=supersecurepassword
+```
+
 ## 🔒 Authentication
 
 ### Register User/Agent
@@ -262,11 +269,11 @@ This tracks all wallet transactions. Roles:
 
 ## 📊 Test Cases
 
-| Endpoint                 | Method |    Role    | Expected Status | Description                        |
-| ------------------------ | :----: | :--------: | :-------------: | ---------------------------------- |
-| `/auth/register`         |  POST  |     –      |       201       | Register a new user or agent       |
-| `/auth/login`            |  POST  |     –      |       200       | Login and return JWT tokens        |
-| `/auth/forgot-password`  |  POST  |     –      |       200       | Send password reset email          |
+| Endpoint                | Method |    Role    | Expected Status | Description                        |
+| ----------------------- | :----: | :--------: | :-------------: | ---------------------------------- |
+| `/auth/register`        |  POST  |     –      |       201       | Register a new user or agent       |
+| `/auth/login`           |  POST  |     –      |       200       | Login and return JWT tokens        |
+| `/auth/forgot-password` |  POST  |     –      |       200       | Send password reset email          |
 | `/wallet/me`            |  GET   |    user    |       200       | View own wallet details            |
 | `/wallet/top-up`        | PATCH  |    user    |       200       | Add funds to own wallet            |
 | `/wallet/withdraw`      | PATCH  |    user    |       200       | Withdraw funds from own wallet     |
