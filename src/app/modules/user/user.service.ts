@@ -174,13 +174,14 @@ const updateUserStatus = async (userId: string, status: UserStatus) => {
   return user.save();
 };
 
-const approveAgent = async (userId: string) => {
+const approveAgentOrUser = async (userId: string) => {
   const user = await User.findById(userId);
-  if (!user || user.role !== Role.AGENT) {
-    throw new AppError(
-      httpStatus.BAD_REQUEST,
-      "Agent not found or invalid role"
-    );
+  if (!user) {
+    throw new AppError(httpStatus.NOT_FOUND, "User not found");
+  }
+
+  if (![Role.AGENT, Role.USER].includes(user.role)) {
+    throw new AppError(httpStatus.BAD_REQUEST, "Invalid user role");
   }
 
   user.verified = verifyStatus.VERIFIED;
@@ -192,5 +193,5 @@ export const UserServices = {
   createUser,
   getAllUsers,
   updateUserStatus,
-  approveAgent,
+  approveAgentOrUser,
 };
