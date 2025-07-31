@@ -101,6 +101,8 @@ _Response (JSON):_
 
 ### (Optional) Forgot/Reset Password
 
+`POST /api/v1/auth/forgot-password`
+
 - **Forgot Password:** Agents or users who forget their password can use `POST /api/v1/auth/forgot-password` with their email to receive a reset link via email.
   _Request Body (JSON):_
 
