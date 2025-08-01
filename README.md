@@ -349,19 +349,83 @@ These settings configure the server port, database connection, authentication se
 ## 📂 Folder Structure
 
 ```
-src/
-├─ app/
-│  ├─ modules/
-│  │  ├─ auth/         (authentication controllers/services)
-│  │  ├─ user/         (user/agent controllers/services)
-│  │  ├─ wallet/       (wallet controllers/services)
-│  │  └─ transaction/  (transaction controllers/services)
-│  ├─ middlewares/     (auth, validation middlewares)
-│  ├─ utils/           (utilities like email sending)
-│  └─ config/          (environment and configuration)
-├─ server.ts           (app entry point)
-└─ ... (other configs and files)
-```
+sarwarhridoy4-digital_wallet_management_system/
+    ├── README.md
+    ├── Digital Wallet Management.postman_collection.json
+    ├── eslint.config.mjs
+    ├── package.json
+    ├── Project_plan.md
+    ├── tsconfig.json
+    ├── vercel.json
+    ├── .env.example
+    └── src/
+        ├── app.ts
+        ├── constants.ts
+        ├── server.ts
+        └── app/
+            ├── config/
+            │   ├── cloudinary.config.ts
+            │   ├── db.ts
+            │   ├── env.ts
+            │   └── multer.config.ts
+            ├── errorHelpers/
+            │   └── AppError.ts
+            ├── helpers/
+            │   ├── handleCastError.ts
+            │   ├── handleDuplicateError.ts
+            │   ├── handlerValidationError.ts
+            │   └── handlerZodError.ts
+            ├── interfaces/
+            │   ├── error.types.ts
+            │   └── index.d.ts
+            ├── middlewares/
+            │   ├── authCheck.ts
+            │   ├── globalErrorHandler.ts
+            │   ├── notFound.ts
+            │   └── validateRequest.ts
+            ├── modules/
+            │   ├── auth/
+            │   │   ├── auth.controller.ts
+            │   │   ├── auth.routes.ts
+            │   │   └── auth.service.ts
+            │   ├── transaction/
+            │   │   ├── transaction.constant.ts
+            │   │   ├── transaction.controller.ts
+            │   │   ├── transaction.interface.ts
+            │   │   ├── transaction.model.ts
+            │   │   ├── transaction.routes.ts
+            │   │   ├── transaction.service.ts
+            │   │   └── transaction.validation.ts
+            │   ├── user/
+            │   │   ├── user.constant.ts
+            │   │   ├── user.controller.ts
+            │   │   ├── user.interface.ts
+            │   │   ├── user.model.ts
+            │   │   ├── user.routes.ts
+            │   │   ├── user.service.ts
+            │   │   └── user.validation.ts
+            │   └── wallet/
+            │       ├── wallet.constant.ts
+            │       ├── wallet.controller.ts
+            │       ├── wallet.interface.ts
+            │       ├── wallet.model.ts
+            │       ├── wallet.routes.ts
+            │       └── wallet.service.ts
+            ├── routes/
+            │   └── index.ts
+            ├── types/
+            │   └── index.ts
+            └── utils/
+                ├── catchAsync.ts
+                ├── jwt.ts
+                ├── QueryBuilders.ts
+                ├── seedAdmin.ts
+                ├── sendMail.ts
+                ├── sendResponse.ts
+                ├── setCookie.ts
+                ├── userToken.ts
+                └── templates/
+                    └── forgotPassword.ejs
 
 This modular layout separates each feature (auth, user, wallet, transaction) into its own directory.
 
