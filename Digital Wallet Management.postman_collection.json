@@ -1771,7 +1771,7 @@
 	"variable": [
 		{
 			"key": "baseURL",
-			"value": "http://localhost:5000",
+			"value": "https://digital-wallet-management-system-kappa.vercel.app/api/v1",
 			"type": "default"
 		}
 	]
