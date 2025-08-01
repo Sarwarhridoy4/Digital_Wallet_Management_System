@@ -365,13 +365,66 @@ src/
 
 This modular layout separates each feature (auth, user, wallet, transaction) into its own directory.
 
-## 🎥 Demo Video Outline (10 min)
+## 🎥 **Demo Video Outline – Digital Wallet API (Total: \~40 min)**
 
-1. **Intro:** Project overview (30s)
-2. **Folder Structure:** Walk through code organization (1m)
-3. **Auth Flow:** Show JWT login and middleware (1m)
-4. **User Features:** Demonstrate wallet operations (1m)
-5. **Agent Features:** Demonstrate agent cash-in/out (1m)
-6. **Admin Features:** Show admin endpoints (approve, block, etc.) (1m)
-7. **Postman Test Run:** Live API requests for all endpoints (3–4m)
-8. **Wrap Up:** Summary and next steps (30s)
+### 1. **🎬 Introduction (1 min)**
+
+- Briefly introduce the project
+- Technologies used (Express.js, MongoDB, TypeScript, etc.)
+- Purpose and key features of the system
+
+### 2. **📁 Folder Structure Overview (3 min)**
+
+- Show the overall file and folder layout
+- Explain the `modules/`, `middlewares/`, `utils/`, and `config/` folders
+- Highlight separation of concerns and scalability approach
+
+### 3. **🔐 Authentication Flow (4 min)**
+
+- Walk through user registration and login
+- Explain JWT token generation and middleware for route protection
+- Role-based access control (User, Agent, Admin)
+
+### 4. **👤 User Features (5 min)**
+
+- View profile and update basic info
+- Wallet balance view and transaction history
+- Send money (if implemented)
+
+### 5. **🧑‍💼 Agent Features (5 min)**
+
+- Perform **Cash-In** to user
+- Perform **Cash-Out** from user
+- View own transaction history
+
+### 6. **🛠️ Admin Features (5 min)**
+
+- View all users, agents, and wallets
+- Approve/reject KYC documents
+- Block/unblock users or agents
+- View/filter all transactions
+
+### 7. **🧪 Postman Live Test Run (15 min)**
+
+- Hit all major API endpoints (User, Agent, Admin)
+- Demonstrate request/response and error handling
+- Show JWT protected route handling
+- Include edge case tests (invalid token, unauthorized access, etc.)
+
+### 8. **📦 Optional: Deployment Highlights (1–2 min)**
+
+- Show live deployment (Vercel, Render, etc.)
+- MongoDB Atlas and environment setup tips (optional)
+
+### 9. **✅ Wrap-Up (1 min)**
+
+- Recap major features demonstrated
+- Share any limitations or upcoming features
+- Thank the viewer and invite feedback
+
+* Postman collection given
+* Import it into your postman to test
+
+**Project Brief**: https://drive.google.com/drive/folders/10CFDoUGXCilPGk2QSthCdndW2tjztmpS?usp=sharing
+
+**Live Deployed**: https://digital-wallet-management-system-kappa.vercel.app
