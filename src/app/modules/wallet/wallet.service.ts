@@ -204,10 +204,33 @@ const getAllWallets = async () => {
   return Wallet.find({});
 };
 
+const getWalletStatistics = async () => {
+  const totalWallets = await Wallet.countDocuments();
+  const totalBalanceAgg = await Wallet.aggregate([
+    { $group: { _id: null, totalBalance: { $sum: "$balance" } } },
+  ]);
+  const totalBalance = totalBalanceAgg[0]?.totalBalance || 0;
+
+  const activeWallets = await Wallet.countDocuments({
+    status: WalletStatus.ACTIVE,
+  });
+  const blockedWallets = await Wallet.countDocuments({
+    status: WalletStatus.BLOCKED,
+  });
+
+  return {
+    totalWallets,
+    totalBalance,
+    activeWallets,
+    blockedWallets,
+  };
+};
+
 export const WalletService = {
   getWalletByUserId,
   topUp,
   withdraw,
   sendMoney,
   getAllWallets,
+  getWalletStatistics,
 };

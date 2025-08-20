@@ -16,6 +16,17 @@ const viewMyWallet = catchAsync(async (req: Request, res: Response) => {
   });
 });
 
+const viewAgentWallet = catchAsync(async (req: Request, res: Response) => {
+  const agent = req.user as JwtPayload;
+  const result = await WalletService.getWalletByUserId(agent.userId);
+  sendResponse(res, {
+    success: true,
+    statusCode: httpStatus.OK,
+    message: "Agent wallet retrieved successfully",
+    data: result,
+  });
+});
+
 const topUpWallet = catchAsync(async (req: Request, res: Response) => {
   const user = req.user as JwtPayload;
   const { amount } = req.body;
@@ -66,10 +77,22 @@ const viewAllWallets = catchAsync(async (_req: Request, res: Response) => {
   });
 });
 
+const getWalletStats = catchAsync(async (_req: Request, res: Response) => {
+  const result = await WalletService.getWalletStatistics();
+  sendResponse(res, {
+    success: true,
+    statusCode: httpStatus.OK,
+    message: "Wallet statistics retrieved successfully",
+    data: result,
+  });
+});
+
 export const WalletController = {
   viewMyWallet,
+  viewAgentWallet,
   topUpWallet,
   withdrawFromWallet,
   sendMoney,
   viewAllWallets,
+  getWalletStats,
 };
