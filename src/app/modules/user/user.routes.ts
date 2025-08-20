@@ -134,6 +134,41 @@ const router = Router();
  *       401: { description: Unauthorized }
  */
 
+/**
+ * @openapi
+ * /user/me:
+ *   patch:
+ *     summary: Update own profile (name, phone, password, profile picture)
+ *     tags: [User]
+ *     security:
+ *       - bearerAuth: []
+ *     requestBody:
+ *       required: false
+ *       content:
+ *         multipart/form-data:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               name:
+ *                 type: string
+ *               phone:
+ *                 type: string
+ *               password:
+ *                 type: string
+ *               profile_picture:
+ *                 type: string
+ *                 format: binary
+ *             example:
+ *               name: "Jane Doe"
+ *               phone: "01712345678"
+ *               password: "NewStrongP@ss1"
+ *     responses:
+ *       200:
+ *         description: Profile updated successfully
+ *       404:
+ *         description: User not found
+ */
+
 router.post(
   "/register",
   multerUpload.fields([
@@ -146,6 +181,12 @@ router.post(
 
 router.get("/", checkAuth(Role.ADMIN), UserControllers.getAllUsers);
 
+router.patch(
+  "/me",
+  checkAuth(...Object.values(Role)),
+  multerUpload.single("profile_picture"),
+  UserControllers.updateProfile
+);
 router.patch(
   "/:id/block",
   checkAuth(Role.ADMIN),

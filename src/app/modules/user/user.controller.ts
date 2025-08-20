@@ -49,6 +49,29 @@ const getAllUsers = catchAsync(async (req, res) => {
   });
 });
 
+export const updateProfile = catchAsync(async (req: Request, res: Response) => {
+  const userId = req.user.id;
+  const payload = req.body;
+
+  const file = req.file; // multer single file
+  const profileBuffer = file?.buffer;
+  const profileOriginalName = file?.originalname;
+
+  const updatedUser = await UserServices.updateProfile(
+    userId,
+    payload,
+    profileBuffer,
+    profileOriginalName
+  );
+
+  sendResponse(res, {
+    statusCode: httpStatus.OK,
+    success: true,
+    message: "Profile updated successfully",
+    data: updatedUser,
+  });
+});
+
 const blockUserWallet = catchAsync(async (req, res) => {
   const result = await UserServices.updateUserStatus(
     req.params.id,
@@ -100,6 +123,7 @@ const suspendAgent = catchAsync(async (req, res) => {
 
 export const UserControllers = {
   createUser,
+  updateProfile,
   getAllUsers,
   blockUserWallet,
   unblockUserWallet,

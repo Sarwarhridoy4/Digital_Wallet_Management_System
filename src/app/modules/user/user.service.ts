@@ -1,5 +1,5 @@
 import mongoose from "mongoose";
-import { IUser } from "./user.interface";
+import { IUser, UpdateProfilePayload } from "./user.interface";
 import { User } from "./user.model";
 import { Wallet } from "../wallet/wallet.model";
 import { Transaction } from "../transaction/transaction.model";
@@ -141,6 +141,39 @@ const createUser = async (
   }
 };
 
+export const updateProfile = async (
+  userId: string,
+  payload: UpdateProfilePayload,
+  profileBuffer?: Buffer,
+  profileOriginalName?: string
+) => {
+  const user = await User.findById(userId);
+  if (!user) {
+    throw new AppError(httpStatus.NOT_FOUND, "User not found");
+  }
+
+  if (payload.name) user.name = payload.name;
+  if (payload.phone) user.phone = payload.phone;
+  if (payload.password) user.password = payload.password; // pre-save hook for hashing
+
+  // Upload profile picture if provided
+  if (profileBuffer && profileOriginalName) {
+    // Delete old profile picture if exists
+    if (user.profile_picture) {
+      await deleteImageFromCloudinary(user.profile_picture);
+    }
+
+    const profileImage = await uploadBufferToCloudinary(
+      profileBuffer,
+      profileOriginalName,
+      "profile-pictures"
+    );
+    user.profile_picture = profileImage.secure_url;
+  }
+
+  return user.save();
+};
+
 const getAllUsers = async (query: Record<string, string>) => {
   const initialQuery = User.find({ role: { $in: [Role.USER, Role.AGENT] } });
 
@@ -191,6 +224,7 @@ const approveAgentOrUser = async (userId: string) => {
 
 export const UserServices = {
   createUser,
+  updateProfile,
   getAllUsers,
   updateUserStatus,
   approveAgentOrUser,
