@@ -44,6 +44,15 @@ const router = Router();
  *       201: { description: User created successfully }
  *       400: { description: Validation or upload error }
  */
+router.post(
+  "/register",
+  multerUpload.fields([
+    { name: "profile_picture", maxCount: 1 },
+    { name: "identifier_image", maxCount: 1 },
+  ]),
+  validateRequest(userRegisterSchema),
+  UserControllers.createUser
+);
 
 /**
  * @openapi
@@ -57,82 +66,25 @@ const router = Router();
  *       200: { description: List of all users }
  *       401: { description: Unauthorized }
  */
+router.get("/", checkAuth(Role.ADMIN), UserControllers.getAllUsers);
 
 /**
  * @openapi
- * /user/{id}/block:
- *   patch:
- *     summary: Block a user's wallet (Admin only)
+ * /user/me:
+ *   get:
+ *     summary: View own profile
  *     tags: [User]
  *     security:
  *       - bearerAuth: []
- *     parameters:
- *       - in: path
- *         name: id
- *         required: true
- *         schema: { type: string }
- *         description: User ID
  *     responses:
- *       200: { description: User wallet blocked successfully }
+ *       200: { description: Own profile retrieved successfully }
  *       401: { description: Unauthorized }
  */
-
-/**
- * @openapi
- * /user/{id}/unblock:
- *   patch:
- *     summary: Unblock a user's wallet (Admin only)
- *     tags: [User]
- *     security:
- *       - bearerAuth: []
- *     parameters:
- *       - in: path
- *         name: id
- *         required: true
- *         schema: { type: string }
- *         description: User ID
- *     responses:
- *       200: { description: User wallet unblocked successfully }
- *       401: { description: Unauthorized }
- */
-
-/**
- * @openapi
- * /user/{id}/approve:
- *   patch:
- *     summary: Approve an agent account (Admin only)
- *     tags: [User]
- *     security:
- *       - bearerAuth: []
- *     parameters:
- *       - in: path
- *         name: id
- *         required: true
- *         schema: { type: string }
- *         description: Agent ID
- *     responses:
- *       200: { description: Agent approved successfully }
- *       401: { description: Unauthorized }
- */
-
-/**
- * @openapi
- * /user/{id}/suspend:
- *   patch:
- *     summary: Suspend an agent account (Admin only)
- *     tags: [User]
- *     security:
- *       - bearerAuth: []
- *     parameters:
- *       - in: path
- *         name: id
- *         required: true
- *         schema: { type: string }
- *         description: Agent ID
- *     responses:
- *       200: { description: Agent suspended successfully }
- *       401: { description: Unauthorized }
- */
+router.get(
+  "/me",
+  checkAuth(...Object.values(Role)),
+  UserControllers.getMyProfile
+);
 
 /**
  * @openapi
@@ -149,62 +101,61 @@ const router = Router();
  *           schema:
  *             type: object
  *             properties:
- *               name:
- *                 type: string
- *               phone:
- *                 type: string
- *               password:
- *                 type: string
+ *               name: { type: string }
+ *               phone: { type: string }
+ *               password: { type: string }
  *               profile_picture:
  *                 type: string
  *                 format: binary
- *             example:
- *               name: "Jane Doe"
- *               phone: "01712345678"
- *               password: "NewStrongP@ss1"
  *     responses:
- *       200:
- *         description: Profile updated successfully
- *       404:
- *         description: User not found
+ *       200: { description: Profile updated successfully }
+ *       404: { description: User not found }
  */
-
-router.post(
-  "/register",
-  multerUpload.fields([
-    { name: "profile_picture", maxCount: 1 },
-    { name: "identifier_image", maxCount: 1 },
-  ]),
-  validateRequest(userRegisterSchema),
-  UserControllers.createUser
-);
-
-router.get("/", checkAuth(Role.ADMIN), UserControllers.getAllUsers);
-
 router.patch(
   "/me",
   checkAuth(...Object.values(Role)),
   multerUpload.single("profile_picture"),
   UserControllers.updateProfile
 );
+
+/**
+ * @openapi
+ * /user/{id}:
+ *   delete:
+ *     summary: Delete a user (Admin only)
+ *     tags: [User]
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema: { type: string }
+ *         description: User ID to delete
+ *     responses:
+ *       200: { description: User deleted successfully }
+ *       401: { description: Unauthorized }
+ */
+router.delete("/:id", checkAuth(Role.ADMIN), UserControllers.deleteUser);
+
+// Block/Unblock wallet
 router.patch(
   "/:id/block",
   checkAuth(Role.ADMIN),
   UserControllers.blockUserWallet
 );
-
 router.patch(
   "/:id/unblock",
   checkAuth(Role.ADMIN),
   UserControllers.unblockUserWallet
 );
 
+// Approve/Suspend agent accounts
 router.patch(
   "/:id/approve",
   checkAuth(Role.ADMIN),
   UserControllers.approveAgent
 );
-
 router.patch(
   "/:id/suspend",
   checkAuth(Role.ADMIN),
