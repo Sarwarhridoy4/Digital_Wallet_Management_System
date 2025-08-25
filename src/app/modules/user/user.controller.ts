@@ -53,7 +53,7 @@ const getAllUsers = catchAsync(async (req: Request, res: Response) => {
 
 // View own profile
 const getMyProfile = catchAsync(async (req: Request, res: Response) => {
-  const userId = req.user.id;
+  const userId = req.user.userId;
   const user = await UserServices.getUserById(userId);
 
   sendResponse(res, {
