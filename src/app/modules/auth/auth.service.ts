@@ -56,15 +56,30 @@ const getNewAccessToken = async (refreshToken: string) => {
 const resetPassword = async (
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   payload: Record<string, any>,
-  decodedToken: JwtPayload
+  tokenData: { id?: string | string[]; token?: string | string[] }
 ) => {
-  if (payload.id != decodedToken.userId) {
-    throw new AppError(401, "You can not reset your password");
+  const { id, token } = tokenData;
+
+  if (!id || !token) {
+    throw new AppError(400, "Invalid or missing reset token");
   }
 
-  const isUserExist = await User.findById(decodedToken.userId);
+  let decoded: JwtPayload;
+  try {
+    decoded = jwt.verify(token as string, envConfig.JWT_ACCESS_SECRET) as JwtPayload;
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  } catch (err) {
+    
+    throw new AppError(401, "Reset token expired or invalid");
+  }
+
+  if (id !== decoded.userId) {
+    throw new AppError(401, "You can not reset this password");
+  }
+
+  const isUserExist = await User.findById(decoded.userId);
   if (!isUserExist) {
-    throw new AppError(401, "User does not exist");
+    throw new AppError(404, "User does not exist");
   }
 
   const hashedPassword = await bcrypt.hash(
@@ -73,9 +88,9 @@ const resetPassword = async (
   );
 
   isUserExist.password = hashedPassword;
-
   await isUserExist.save();
 };
+
 
 const forgotPassword = async (email: string) => {
   const isUserExist = await User.findOne({ email });

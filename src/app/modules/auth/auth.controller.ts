@@ -88,10 +88,10 @@ const changePassword = catchAsync(
 );
 const resetPassword = catchAsync(
   async (req: Request, res: Response, next: NextFunction) => {
-    const decodedToken = req.user;
-    
+    const id = (req.query.id as string) || "";
+    const token = (req.query.token as string) || "";
 
-    await AuthServices.resetPassword(req.body, decodedToken as JwtPayload);
+    await AuthServices.resetPassword({ id, token }, req.body.newPassword);
 
     sendResponse(res, {
       success: true,
@@ -101,6 +101,7 @@ const resetPassword = catchAsync(
     });
   }
 );
+
 const setPassword = catchAsync(
   async (req: Request, res: Response, next: NextFunction) => {
     const decodedToken = req.user as JwtPayload;
