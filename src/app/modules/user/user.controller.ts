@@ -66,7 +66,7 @@ const getMyProfile = catchAsync(async (req: Request, res: Response) => {
 
 // Update own profile
 const updateProfile = catchAsync(async (req: Request, res: Response) => {
-  const userId = req.user.id;
+  const userId = req.user.userId;
   const payload = req.body;
 
   const file = req.file;

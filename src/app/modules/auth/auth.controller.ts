@@ -72,6 +72,7 @@ const changePassword = catchAsync(
     const oldPassword = req.body.oldPassword;
     const decodedToken = req.user;
 
+
     await AuthServices.changePassword(
       oldPassword,
       newPassword,

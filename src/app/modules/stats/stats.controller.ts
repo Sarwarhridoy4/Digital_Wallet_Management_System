@@ -1,13 +1,11 @@
-
 import httpStatus from "http-status-codes";
 import { catchAsync } from "../../utils/catchAsync";
 import { StatServices } from "./stats.service";
 import { sendResponse } from "../../utils/sendResponse";
 
-
 // 📊 User Stats
 const getUserStats = catchAsync(async (req, res) => {
-  const result = await StatServices.getUserStats(req.user.id);
+  const result = await StatServices.getUserStats(req.user.userId);
   sendResponse(res, {
     statusCode: httpStatus.OK,
     success: true,
@@ -18,7 +16,7 @@ const getUserStats = catchAsync(async (req, res) => {
 
 // 📊 Agent Stats
 const getAgentStats = catchAsync(async (req, res) => {
-  const result = await StatServices.getAgentStats(req.user.id);
+  const result = await StatServices.getAgentStats(req.user.userId);
   sendResponse(res, {
     statusCode: httpStatus.OK,
     success: true,
