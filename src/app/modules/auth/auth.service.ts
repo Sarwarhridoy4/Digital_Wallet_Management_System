@@ -9,7 +9,7 @@ import {
 } from "../../utils/userToken";
 import { JwtPayload } from "jsonwebtoken";
 import envConfig from "../../config/env";
-import { UserStatus, verifyStatus } from "../../types";
+import { ResetPasswordPayload, UserStatus, verifyStatus } from "../../types";
 import jwt from "jsonwebtoken";
 import { sendEmail } from "../../utils/sendMail";
 
@@ -53,12 +53,10 @@ const getNewAccessToken = async (refreshToken: string) => {
   };
 };
 
-const resetPassword = async (
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  payload: Record<string, any>,
-  tokenData: { id?: string | string[]; token?: string | string[] }
-) => {
-  const { id, token } = tokenData;
+const resetPassword = async (payload: ResetPasswordPayload) => {
+  const { id, token, newPassword } = payload;
+  console.log(id, token, newPassword);
+  console.log(payload)
 
   if (!id || !token) {
     throw new AppError(400, "Invalid or missing reset token");
@@ -66,31 +64,31 @@ const resetPassword = async (
 
   let decoded: JwtPayload;
   try {
-    decoded = jwt.verify(token as string, envConfig.JWT_ACCESS_SECRET) as JwtPayload;
+    decoded = jwt.verify(token, envConfig.JWT_ACCESS_SECRET) as JwtPayload;
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   } catch (err) {
-    
     throw new AppError(401, "Reset token expired or invalid");
   }
 
   if (id !== decoded.userId) {
-    throw new AppError(401, "You can not reset this password");
+    throw new AppError(401, "You are not allowed to reset this password");
   }
 
-  const isUserExist = await User.findById(decoded.userId);
-  if (!isUserExist) {
+  const user = await User.findById(decoded.userId);
+  if (!user) {
     throw new AppError(404, "User does not exist");
   }
 
   const hashedPassword = await bcrypt.hash(
-    payload.newPassword,
+    newPassword,
     Number(envConfig.BCRYPT_SALT_ROUND)
   );
 
-  isUserExist.password = hashedPassword;
-  await isUserExist.save();
-};
+  user.password = hashedPassword;
+  await user.save();
 
+  return true;
+};
 
 const forgotPassword = async (email: string) => {
   const isUserExist = await User.findOne({ email });
