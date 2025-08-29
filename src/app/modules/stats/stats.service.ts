@@ -72,8 +72,27 @@ const getAgentStats = async (agentId: string) => {
 };
 
 const getAdminStats = async () => {
+  // Users
   const totalUsers = await User.countDocuments({ role: Role.USER });
   const totalAgents = await User.countDocuments({ role: Role.AGENT });
+
+  const activeUsers = await User.countDocuments({
+    role: Role.USER,
+    status: "ACTIVE",
+    verified: "VERIFIED",
+  });
+
+  const pendingApproval = await User.countDocuments({
+    role: Role.USER,
+    verified: "PENDING",
+  });
+
+  const suspendedUsers = await User.countDocuments({
+    role: Role.USER,
+    status: { $in: ["SUSPENDED", "BLOCKED"] },
+  });
+
+  // Transactions
   const totalTransactions = await Transaction.countDocuments();
 
   const totalTransactionVolume = await Transaction.aggregate([
@@ -86,6 +105,9 @@ const getAdminStats = async () => {
 
   return {
     totalUsers,
+    activeUsers,
+    pendingApproval,
+    suspendedUsers,
     totalAgents,
     totalTransactions,
     totalTransactionVolume: totalTransactionVolume[0]?.total || 0,
