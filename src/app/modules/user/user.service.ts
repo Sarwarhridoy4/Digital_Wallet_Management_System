@@ -211,10 +211,20 @@ const approveAgentOrUser = async (userId: string) => {
   return user.save();
 };
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+const updateUserById = async (id: string, data: any) => {
+  const user = await User.findByIdAndUpdate(id, data, { new: true });
+  if (!user) {
+    throw new AppError(httpStatus.NOT_FOUND, "User not found");
+  }
+  return user;
+};
+
 export const UserServices = {
   createUser,
   updateProfile,
   getUserById,
+  updateUserById,
   deleteUserById,
   getAllUsers,
   updateUserStatus,

@@ -141,6 +141,32 @@ const suspendAgent = catchAsync(async (req: Request, res: Response) => {
   });
 });
 
+// Get individual user info (Admin only)
+const getUserById = catchAsync(async (req: Request, res: Response) => {
+  const result = await UserServices.getUserById(req.params.id);
+  sendResponse(res, {
+    statusCode: httpStatus.OK,
+    success: true,
+    message: "User fetched successfully",
+    data: result,
+  });
+});
+
+// Update individual user info (Admin only)
+const updateUserById = catchAsync(async (req: Request, res: Response) => {
+  const { id } = req.params;
+  const updateData = req.body;
+
+  const result = await UserServices.updateUserById(id, updateData);
+
+  sendResponse(res, {
+    statusCode: httpStatus.OK,
+    success: true,
+    message: "User updated successfully",
+    data: result,
+  });
+});
+
 // Delete user (Admin only)
 const deleteUser = catchAsync(async (req: Request, res: Response) => {
   const result = await UserServices.deleteUserById(req.params.id);
@@ -155,6 +181,8 @@ const deleteUser = catchAsync(async (req: Request, res: Response) => {
 export const UserControllers = {
   createUser,
   getAllUsers,
+  getUserById,
+  updateUserById,
   getMyProfile,
   updateProfile,
   blockUserWallet,
