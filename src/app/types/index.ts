@@ -26,6 +26,7 @@ export enum IdentifierType {
 export enum WalletStatus {
   ACTIVE = "ACTIVE",
   BLOCKED = "BLOCKED",
+  FROZEN ="FROZEN"
 }
 
 // src/types/index.ts or wherever your shared types live

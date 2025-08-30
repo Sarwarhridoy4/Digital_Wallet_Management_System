@@ -4,6 +4,7 @@ import { WalletService } from "./wallet.service";
 import { sendResponse } from "../../utils/sendResponse";
 import { JwtPayload } from "jsonwebtoken";
 import { catchAsync } from "../../utils/catchAsync";
+import { WalletStatus } from "../../types";
 
 const viewMyWallet = catchAsync(async (req: Request, res: Response) => {
   const user = req.user as JwtPayload;
@@ -87,6 +88,23 @@ const getWalletStats = catchAsync(async (_req: Request, res: Response) => {
   });
 });
 
+const updateWalletStatus = catchAsync(async (req: Request, res: Response) => {
+  const { walletId, status } = req.params;
+  const updatedWalletStatus = status as WalletStatus;
+
+  const result = await WalletService.updateWalletStatus(
+    walletId,
+    updatedWalletStatus
+  );
+
+  sendResponse(res, {
+    success: true,
+    statusCode: httpStatus.OK,
+    message: `Wallet status updated to ${status} successfully`,
+    data: result,
+  });
+});
+
 export const WalletController = {
   viewMyWallet,
   viewAgentWallet,
@@ -95,4 +113,5 @@ export const WalletController = {
   sendMoney,
   viewAllWallets,
   getWalletStats,
+  updateWalletStatus,
 };

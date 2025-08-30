@@ -55,8 +55,8 @@ const getNewAccessToken = async (refreshToken: string) => {
 
 const resetPassword = async (payload: ResetPasswordPayload) => {
   const { id, token, newPassword } = payload;
-  console.log(id, token, newPassword);
-  console.log(payload)
+  // console.log(id, token, newPassword);
+  // console.log(payload)
 
   if (!id || !token) {
     throw new AppError(400, "Invalid or missing reset token");

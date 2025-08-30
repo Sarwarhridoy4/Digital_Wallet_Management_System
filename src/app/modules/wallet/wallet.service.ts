@@ -226,6 +226,22 @@ const getWalletStatistics = async () => {
   };
 };
 
+const updateWalletStatus = async (walletId: string, status: WalletStatus) => {
+  if (!Object.values(WalletStatus).includes(status)) {
+    throw new AppError(httpStatus.BAD_REQUEST, "Invalid wallet status");
+  }
+
+  const wallet = await Wallet.findById(walletId);
+  if (!wallet) {
+    throw new AppError(httpStatus.NOT_FOUND, "Wallet not found");
+  }
+
+  wallet.status = status;
+  await wallet.save();
+
+  return wallet;
+};
+
 export const WalletService = {
   getWalletByUserId,
   topUp,
@@ -233,4 +249,5 @@ export const WalletService = {
   sendMoney,
   getAllWallets,
   getWalletStatistics,
+  updateWalletStatus,
 };

@@ -179,6 +179,53 @@ router.get("/", checkAuth(Role.ADMIN), WalletController.viewAllWallets);
  *                 blockedWallets: { type: number }
  *       401: { description: Unauthorized }
  */
-router.get("/admin/stats", checkAuth(Role.ADMIN), WalletController.getWalletStats);
+router.get(
+  "/admin/stats",
+  checkAuth(Role.ADMIN),
+  WalletController.getWalletStats
+);
+
+/**
+ * @openapi
+ * /wallet/admin/{walletId}/status:
+ *   patch:
+ *     summary: Block or Unblock a user's wallet
+ *     tags: [Wallet]
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: walletId
+ *         required: true
+ *         schema:
+ *           type: string
+ *         description: Wallet ID to update
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             required:
+ *               - status
+ *             properties:
+ *               status:
+ *                 type: string
+ *                 enum: [ACTIVE, BLOCKED]
+ *     responses:
+ *       200:
+ *         description: Wallet status updated successfully
+ *       400:
+ *         description: Invalid request
+ *       401:
+ *         description: Unauthorized
+ *       404:
+ *         description: Wallet not found
+ */
+router.patch(
+  "/admin/:walletId/:status",
+  checkAuth(Role.ADMIN),
+  WalletController.updateWalletStatus
+);
 
 export const WalletRoutes = router;
