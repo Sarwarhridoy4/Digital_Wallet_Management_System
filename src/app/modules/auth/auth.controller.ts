@@ -86,20 +86,33 @@ const changePassword = catchAsync(
     });
   }
 );
-const resetPassword = catchAsync(
-  async (req: Request, res: Response, next: NextFunction) => {
-    const decodedToken = req.user;
-
-    await AuthServices.resetPassword(req.body, decodedToken as JwtPayload);
-
-    sendResponse(res, {
-      success: true,
-      statusCode: httpStatus.OK,
-      message: "Password Changed Successfully",
-      data: null,
-    });
+const resetPassword = catchAsync(async (req: Request, res: Response) => {
+  // console.log(req.params.id, ".........")
+  const id = req.query.id as string;
+  if (!id) {
+    throw new AppError(httpStatus.BAD_REQUEST, "ID is required");
   }
-);
+  const token = req.query.token as string;
+  if (!token) {
+    throw new AppError(httpStatus.BAD_REQUEST, "Token is required");
+  }
+  const { newPassword } = req.body;
+  
+
+  await AuthServices.resetPassword({
+    id,
+    token,
+    newPassword,
+  });
+
+  sendResponse(res, {
+    success: true,
+    statusCode: httpStatus.OK,
+    message: "Password changed successfully",
+    data: null,
+  });
+});
+
 const setPassword = catchAsync(
   async (req: Request, res: Response, next: NextFunction) => {
     const decodedToken = req.user as JwtPayload;
