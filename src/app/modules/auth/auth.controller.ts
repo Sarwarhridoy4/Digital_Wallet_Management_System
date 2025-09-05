@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
-import { NextFunction, Request, Response } from "express";
+import { CookieOptions, NextFunction, Request, Response } from "express";
 import httpStatus from "http-status-codes";
 import { JwtPayload } from "jsonwebtoken";
 import { catchAsync } from "../../utils/catchAsync";
@@ -46,17 +46,15 @@ const getNewAccessToken = catchAsync(
   }
 );
 const logout = catchAsync(
-  async (_req: Request, res: Response, next: NextFunction) => {
-    res.clearCookie("accessToken", {
+  async (_req: Request, res: Response, _next: NextFunction) => {
+    const cookieOptions: CookieOptions = {
       httpOnly: true,
-      secure: false,
-      sameSite: "lax",
-    });
-    res.clearCookie("refreshToken", {
-      httpOnly: true,
-      secure: false,
-      sameSite: "lax",
-    });
+      secure: true,
+      sameSite: "none",
+    };
+
+    res.clearCookie("accessToken", cookieOptions);
+    res.clearCookie("refreshToken", cookieOptions);
 
     sendResponse(res, {
       success: true,
@@ -66,6 +64,7 @@ const logout = catchAsync(
     });
   }
 );
+
 const changePassword = catchAsync(
   async (req: Request, res: Response, next: NextFunction) => {
     const newPassword = req.body.newPassword;
@@ -97,7 +96,6 @@ const resetPassword = catchAsync(async (req: Request, res: Response) => {
     throw new AppError(httpStatus.BAD_REQUEST, "Token is required");
   }
   const { newPassword } = req.body;
-  
 
   await AuthServices.resetPassword({
     id,
