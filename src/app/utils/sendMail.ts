@@ -8,16 +8,13 @@ import envConfig from "../config/env";
 
 const transporter = nodemailer.createTransport({
   // port: envVars.EMAIL_SENDER.SMTP_PORT,
-  secure: true,
+  secure: Number(envConfig.EMAIL_SENDER.SMTP_PORT) === 465,
   auth: {
     user: envConfig.EMAIL_SENDER.SMTP_USER,
     pass: envConfig.EMAIL_SENDER.SMTP_PASS,
   },
   port: Number(envConfig.EMAIL_SENDER.SMTP_PORT),
   host: envConfig.EMAIL_SENDER.SMTP_HOST,
-  connectionTimeout: 10000, // 10s
-  greetingTimeout: 10000, // 10s
-  socketTimeout: 10000, // 10s
 });
 
 interface SendEmailOptions {
