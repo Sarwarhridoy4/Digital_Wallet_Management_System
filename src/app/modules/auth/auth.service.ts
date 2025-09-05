@@ -55,8 +55,6 @@ const getNewAccessToken = async (refreshToken: string) => {
 
 const resetPassword = async (payload: ResetPasswordPayload) => {
   const { id, token, newPassword } = payload;
-  // console.log(id, token, newPassword);
-  // console.log(payload)
 
   if (!id || !token) {
     throw new AppError(400, "Invalid or missing reset token");
@@ -65,11 +63,12 @@ const resetPassword = async (payload: ResetPasswordPayload) => {
   let decoded: JwtPayload;
   try {
     decoded = jwt.verify(token, envConfig.JWT_ACCESS_SECRET) as JwtPayload;
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   } catch (err) {
-    throw new AppError(401, "Reset token expired or invalid");
+
+    throw new AppError(401, `Reset token expired or invalid: ${err}`);
   }
 
+  // ✅ Ensure token userId matches the one in query param
   if (id !== decoded.userId) {
     throw new AppError(401, "You are not allowed to reset this password");
   }

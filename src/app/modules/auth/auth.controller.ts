@@ -86,22 +86,16 @@ const changePassword = catchAsync(
   }
 );
 const resetPassword = catchAsync(async (req: Request, res: Response) => {
-  // console.log(req.params.id, ".........")
   const id = req.query.id as string;
-  if (!id) {
-    throw new AppError(httpStatus.BAD_REQUEST, "ID is required");
-  }
   const token = req.query.token as string;
-  if (!token) {
-    throw new AppError(httpStatus.BAD_REQUEST, "Token is required");
-  }
   const { newPassword } = req.body;
 
-  await AuthServices.resetPassword({
-    id,
-    token,
-    newPassword,
-  });
+  if (!id) throw new AppError(httpStatus.BAD_REQUEST, "ID is required");
+  if (!token) throw new AppError(httpStatus.BAD_REQUEST, "Token is required");
+  if (!newPassword)
+    throw new AppError(httpStatus.BAD_REQUEST, "New password is required");
+
+  await AuthServices.resetPassword({ id, token, newPassword });
 
   sendResponse(res, {
     success: true,
