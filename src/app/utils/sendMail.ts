@@ -1,21 +1,13 @@
 /* eslint-disable no-console */
 /* eslint-disable @typescript-eslint/no-explicit-any */
+
 import ejs from "ejs";
-import nodemailer from "nodemailer";
 import path from "path";
+import { Resend } from "resend";
 import AppError from "../errorHelpers/AppError";
 import envConfig from "../config/env";
 
-const transporter = nodemailer.createTransport({
-  // port: envVars.EMAIL_SENDER.SMTP_PORT,
-  secure: Number(envConfig.EMAIL_SENDER.SMTP_PORT) === 465,
-  auth: {
-    user: envConfig.EMAIL_SENDER.SMTP_USER,
-    pass: envConfig.EMAIL_SENDER.SMTP_PASS,
-  },
-  port: Number(envConfig.EMAIL_SENDER.SMTP_PORT),
-  host: envConfig.EMAIL_SENDER.SMTP_HOST,
-});
+const resend = new Resend(envConfig.RESEND_API_KEY);
 
 interface SendEmailOptions {
   to: string;
@@ -37,23 +29,33 @@ export const sendEmail = async ({
   attachments,
 }: SendEmailOptions) => {
   try {
-    const templatePath = path.join(__dirname, `templates/${templateName}.ejs`);
+    const templatePath = path.join(
+      process.cwd(),
+      "src",
+      "emails",
+      "templates",
+      `${templateName}.ejs`,
+    );
 
     const html = await ejs.renderFile(templatePath, templateData);
-    const info = await transporter.sendMail({
-      from: envConfig.EMAIL_SENDER.SMTP_FROM,
-      to: to,
-      subject: subject,
-      html: html,
-      attachments: attachments?.map((attachment) => ({
-        filename: attachment.filename,
-        content: attachment.content,
-        contentType: attachment.contentType,
+
+    const response = await resend.emails.send({
+      from: envConfig.EMAIL_FROM,
+      to,
+      subject,
+      html,
+      attachments: attachments?.map((a) => ({
+        filename: a.filename,
+        content: a.content,
+        contentType: a.contentType,
       })),
     });
-    console.log(`\u2709\uFE0F Email sent to ${to}: ${info.messageId}`);
+
+    if (response.data?.id) {
+      console.log("📧 Email sent:", response.data.id);
+    }
   } catch (error: any) {
-    console.log("email sending error", error.message);
-    throw new AppError(401, "Email error");
+    console.error("Email sending failed:", error);
+    throw new AppError(500, "Email service unavailable");
   }
 };

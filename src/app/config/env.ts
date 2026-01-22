@@ -18,13 +18,9 @@ interface EnvConfig {
   ADMIN_EMAIL?: string;
   ADMIN_PASSWORD?: string;
   ADMIN_PHONE?: string;
-  EMAIL_SENDER: {
-    SMTP_USER: string;
-    SMTP_PASS: string;
-    SMTP_PORT: string;
-    SMTP_HOST: string;
-    SMTP_FROM: string;
-  };
+  RESEND_API_KEY: string;
+  EMAIL_FROM: string;
+  
 }
 const envConfig: EnvConfig = {
   ADMIN_EMAIL: process.env.ADMIN_EMAIL as string,
@@ -43,12 +39,7 @@ const envConfig: EnvConfig = {
   JWT_ACCESS_EXPIRES: process.env.JWT_ACCESS_EXPIRES || "1d",
   JWT_REFRESH_EXPIRES: process.env.JWT_REFRESH_EXPIRES || "30d",
   BCRYPT_SALT_ROUND: process.env.BCRYPT_SALT_ROUND || "10",
-  EMAIL_SENDER: {
-    SMTP_USER: process.env.SMTP_USER as string,
-    SMTP_PASS: process.env.SMTP_PASS as string,
-    SMTP_PORT: process.env.SMTP_PORT as string,
-    SMTP_HOST: process.env.SMTP_HOST as string,
-    SMTP_FROM: process.env.SMTP_FROM as string,
-  },
+  RESEND_API_KEY: process.env.RESEND_API_KEY as string,
+  EMAIL_FROM: process.env.EMAIL_FROM as string,
 };
 export default envConfig;
