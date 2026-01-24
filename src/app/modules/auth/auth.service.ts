@@ -24,7 +24,7 @@ const credentialsLogin = async (payload: Partial<IUser>) => {
 
   const isPasswordMatched = await bcrypt.compare(
     password as string,
-    isUserExist.password as string
+    isUserExist.password as string,
   );
 
   if (!isPasswordMatched) {
@@ -44,9 +44,8 @@ const credentialsLogin = async (payload: Partial<IUser>) => {
 };
 
 const getNewAccessToken = async (refreshToken: string) => {
-  const newAccessToken = await createNewAccessTokenWithRefreshToken(
-    refreshToken
-  );
+  const newAccessToken =
+    await createNewAccessTokenWithRefreshToken(refreshToken);
 
   return {
     accessToken: newAccessToken,
@@ -64,7 +63,6 @@ const resetPassword = async (payload: ResetPasswordPayload) => {
   try {
     decoded = jwt.verify(token, envConfig.JWT_ACCESS_SECRET) as JwtPayload;
   } catch (err) {
-
     throw new AppError(401, `Reset token expired or invalid: ${err}`);
   }
 
@@ -80,7 +78,7 @@ const resetPassword = async (payload: ResetPasswordPayload) => {
 
   const hashedPassword = await bcrypt.hash(
     newPassword,
-    Number(envConfig.BCRYPT_SALT_ROUND)
+    Number(envConfig.BCRYPT_SALT_ROUND),
   );
 
   user.password = hashedPassword;
@@ -95,9 +93,11 @@ const forgotPassword = async (email: string) => {
   if (!isUserExist) {
     throw new AppError(httpStatus.BAD_REQUEST, "User does not exist");
   }
+
   if (isUserExist.verified !== verifyStatus.VERIFIED) {
     throw new AppError(httpStatus.BAD_REQUEST, "User is not verified");
   }
+
   if (
     isUserExist.status === UserStatus.BLOCKED ||
     isUserExist.status === UserStatus.INACTIVE ||
@@ -105,7 +105,7 @@ const forgotPassword = async (email: string) => {
   ) {
     throw new AppError(
       httpStatus.BAD_REQUEST,
-      `User is ${isUserExist.status.toLowerCase()}`
+      `User is ${isUserExist.status.toLowerCase()}`,
     );
   }
 
@@ -121,16 +121,32 @@ const forgotPassword = async (email: string) => {
 
   const resetUILink = `${envConfig.FRONTEND_URL}/reset-password?id=${isUserExist._id}&token=${resetToken}`;
 
-  await sendEmail({
-  to: isUserExist.email,
-  subject: "Password Reset",
-  templateName: "forgotPassword",
-  templateData: {
-    name: isUserExist.name,
-    resetUILink,
-  },
-});
+  try {
+    await sendEmail({
+      to: isUserExist.email,
+      subject: "Password Reset",
+      templateName: "forgotPassword",
+      templateData: {
+        name: isUserExist.name,
+        resetUILink,
+      },
+    });
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  } catch (error: any) {
+    /**
+     * IMPORTANT:
+     * Do NOT mask provider errors (Resend, SMTP, etc.)
+     * Surface the exact message so frontend can display it.
+     */
+    throw new AppError(
+      error?.statusCode || httpStatus.INTERNAL_SERVER_ERROR,
+      error?.message || "Failed to send password reset email",
+    );
+  }
 
+  return {
+    message: "Password reset email sent successfully",
+  };
 };
 
 const setPassword = async (userId: string, plainPassword: string) => {
@@ -142,7 +158,7 @@ const setPassword = async (userId: string, plainPassword: string) => {
 
   const hashedPassword = await bcrypt.hash(
     plainPassword,
-    Number(envConfig.BCRYPT_SALT_ROUND)
+    Number(envConfig.BCRYPT_SALT_ROUND),
   );
 
   user.password = hashedPassword;
@@ -153,7 +169,7 @@ const setPassword = async (userId: string, plainPassword: string) => {
 const changePassword = async (
   oldPassword: string,
   newPassword: string,
-  decodedToken: JwtPayload
+  decodedToken: JwtPayload,
 ) => {
   const user = await User.findById(decodedToken.userId);
 
@@ -163,7 +179,7 @@ const changePassword = async (
 
   const isOldPasswordMatch = await bcrypt.compare(
     oldPassword,
-    user.password as string
+    user.password as string,
   );
   if (!isOldPasswordMatch) {
     throw new AppError(httpStatus.UNAUTHORIZED, "Old Password does not match");
@@ -171,7 +187,7 @@ const changePassword = async (
 
   user.password = await bcrypt.hash(
     newPassword,
-    Number(envConfig.BCRYPT_SALT_ROUND)
+    Number(envConfig.BCRYPT_SALT_ROUND),
   );
 
   await user.save();

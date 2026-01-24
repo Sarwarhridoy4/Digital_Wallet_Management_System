@@ -4,14 +4,30 @@ import { z } from "zod";
 import { bdPhoneRegex, IdentifierType, Role, UserStatus } from "../../types";
 
 export const userRegisterSchema = z.object({
-  // Basic Info
   name: z.string().min(2, "Name must be at least 2 characters long"),
-  email: z.string().email("Invalid email address"),
-  phone: z.string().regex(bdPhoneRegex, "Invalid Bangladeshi phone number"),
+  email: z.email("Invalid email address"),
+
+  phone: z
+    .string()
+    .trim()
+    .transform((val) => {
+      const digits = val.replace(/\D/g, "");
+
+      // Convert local format → international
+      if (digits.startsWith("01")) {
+        return "88" + digits;
+      }
+
+      return digits;
+    })
+    .refine(
+      (val) => bdPhoneRegex.test(val),
+      "Invalid Bangladeshi phone number (017XXXXXXXX or +8801XXXXXXXXX)",
+    ),
+
   password: z.string().min(6, "Password must be at least 6 characters"),
   identifier: z.string(),
 
-  // Role & Status
   role: z.enum([Role.USER, Role.AGENT]).optional().default(Role.USER),
 });
 

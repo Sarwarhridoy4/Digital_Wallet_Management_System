@@ -32,7 +32,8 @@ export const sendEmail = async ({
     const templatePath = path.join(
       process.cwd(),
       "src",
-      "emails",
+      "app",
+      "utils",
       "templates",
       `${templateName}.ejs`,
     );
@@ -50,6 +51,7 @@ export const sendEmail = async ({
         contentType: a.contentType,
       })),
     });
+    
 
     if (response.data?.id) {
       console.log("📧 Email sent:", response.data.id);
