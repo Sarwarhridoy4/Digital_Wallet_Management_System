@@ -93,7 +93,7 @@ const updateWalletStatus = catchAsync(async (req: Request, res: Response) => {
   const updatedWalletStatus = status as WalletStatus;
 
   const result = await WalletService.updateWalletStatus(
-    walletId,
+    walletId as string,
     updatedWalletStatus
   );
 

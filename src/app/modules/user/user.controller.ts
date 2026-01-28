@@ -20,7 +20,7 @@ const createUser = catchAsync(async (req: Request, res: Response) => {
     profileBuffer,
     profileOriginalName,
     identifierBuffer,
-    identifierOriginalName
+    identifierOriginalName,
   );
 
   sendResponse(res, {
@@ -37,7 +37,7 @@ const getAllUsers = catchAsync(async (req: Request, res: Response) => {
     Object.entries(req.query).map(([key, value]) => [
       key,
       Array.isArray(value) ? value.join(",") : String(value),
-    ])
+    ]),
   ) as Record<string, string>;
 
   const result = await UserServices.getAllUsers(query);
@@ -77,7 +77,7 @@ const updateProfile = catchAsync(async (req: Request, res: Response) => {
     userId,
     payload,
     profileBuffer,
-    profileOriginalName
+    profileOriginalName,
   );
 
   sendResponse(res, {
@@ -91,8 +91,8 @@ const updateProfile = catchAsync(async (req: Request, res: Response) => {
 // Block user wallet
 const blockUserWallet = catchAsync(async (req: Request, res: Response) => {
   const result = await UserServices.updateUserStatus(
-    req.params.id,
-    UserStatus.BLOCKED
+    req.params.id as string,
+    UserStatus.BLOCKED,
   );
   sendResponse(res, {
     statusCode: httpStatus.OK,
@@ -105,8 +105,8 @@ const blockUserWallet = catchAsync(async (req: Request, res: Response) => {
 // Unblock user wallet
 const unblockUserWallet = catchAsync(async (req: Request, res: Response) => {
   const result = await UserServices.updateUserStatus(
-    req.params.id,
-    UserStatus.ACTIVE
+    req.params.id as string,
+    UserStatus.ACTIVE,
   );
   sendResponse(res, {
     statusCode: httpStatus.OK,
@@ -118,7 +118,7 @@ const unblockUserWallet = catchAsync(async (req: Request, res: Response) => {
 
 // Approve agent
 const approveAgent = catchAsync(async (req: Request, res: Response) => {
-  const result = await UserServices.approveAgentOrUser(req.params.id);
+  const result = await UserServices.approveAgentOrUser(req.params.id as string);
   sendResponse(res, {
     statusCode: httpStatus.OK,
     success: true,
@@ -130,8 +130,8 @@ const approveAgent = catchAsync(async (req: Request, res: Response) => {
 // Suspend agent
 const suspendAgent = catchAsync(async (req: Request, res: Response) => {
   const result = await UserServices.updateUserStatus(
-    req.params.id,
-    UserStatus.SUSPENDED
+    req.params.id as string,
+    UserStatus.SUSPENDED,
   );
   sendResponse(res, {
     statusCode: httpStatus.OK,
@@ -143,7 +143,7 @@ const suspendAgent = catchAsync(async (req: Request, res: Response) => {
 
 // Get individual user info (Admin only)
 const getUserById = catchAsync(async (req: Request, res: Response) => {
-  const result = await UserServices.getUserById(req.params.id);
+  const result = await UserServices.getUserById(req.params.id as string);
   sendResponse(res, {
     statusCode: httpStatus.OK,
     success: true,
@@ -157,7 +157,7 @@ const updateUserById = catchAsync(async (req: Request, res: Response) => {
   const { id } = req.params;
   const updateData = req.body;
 
-  const result = await UserServices.updateUserById(id, updateData);
+  const result = await UserServices.updateUserById(id as string, updateData);
 
   sendResponse(res, {
     statusCode: httpStatus.OK,
@@ -169,7 +169,7 @@ const updateUserById = catchAsync(async (req: Request, res: Response) => {
 
 // Delete user (Admin only)
 const deleteUser = catchAsync(async (req: Request, res: Response) => {
-  const result = await UserServices.deleteUserById(req.params.id);
+  const result = await UserServices.deleteUserById(req.params.id as string);
   sendResponse(res, {
     statusCode: httpStatus.OK,
     success: true,
