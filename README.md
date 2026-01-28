@@ -429,6 +429,8 @@ sarwarhridoy4-digital_wallet_management_system/
                 └── templates/
                     └── forgotPassword.ejs
 
+```
+
 This modular layout separates each feature (auth, user, wallet, transaction) into its own directory.
 
 ## 🎥 **Demo Video Outline – Digital Wallet API (Total: \~40 min)**
