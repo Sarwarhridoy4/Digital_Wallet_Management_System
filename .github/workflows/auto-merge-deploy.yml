@@ -79,4 +79,4 @@ jobs:
           vercel-project-id: ${{ secrets.VERCEL_PROJECT_ID }}
           production: true
           # Optional: if you want to force Vercel to skip its own build
-          # scope: vercel build --prod    (but usually not needed with recent Vercel)
+          scope: vercel build --prod    (but usually not needed with recent Vercel)
