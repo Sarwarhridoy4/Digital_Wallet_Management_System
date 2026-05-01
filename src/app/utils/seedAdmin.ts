@@ -3,7 +3,7 @@
 import bcrypt from "bcrypt";
 import { User } from "../modules/user/user.model";
 import { Wallet } from "../modules/wallet/wallet.model"; // ✅ import Wallet model
-import { Role, UserStatus, IdentifierType, verifyStatus } from "../types";
+import { Role, UserStatus, IdentifierType, verifyStatus, WalletStatus } from "../types";
 import envConfig from "../config/env";
 
 export const seedAdmin = async () => {
@@ -46,11 +46,11 @@ export const seedAdmin = async () => {
     const superAdmin = await User.create(payload);
 
     // ✅ Create Wallet for Admin
-    await Wallet.create({
-      user: superAdmin._id,
-      balance: 50, // or set a custom admin starting balance
-      status: "ACTIVE",
-    });
+     await Wallet.create({
+       user: superAdmin._id,
+       balance: 50, // or set a custom admin starting balance
+       status: WalletStatus.ACTIVE,
+     });
 
     console.log("✅ Admin & Wallet Created Successfully!\n");
     console.log(superAdmin);

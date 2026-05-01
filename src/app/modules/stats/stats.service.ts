@@ -1,7 +1,7 @@
 import { User } from "../user/user.model";
 import { Wallet } from "../wallet/wallet.model";
 import { Transaction } from "../transaction/transaction.model";
-import { Role } from "../../types";
+import { Role, UserStatus, verifyStatus } from "../../types";
 import AppError from "../../errorHelpers/AppError";
 import httpStatus from "http-status-codes";
 import { TransactionType } from "../transaction/transaction.constant";
@@ -76,21 +76,21 @@ const getAdminStats = async () => {
   const totalUsers = await User.countDocuments({ role: Role.USER });
   const totalAgents = await User.countDocuments({ role: Role.AGENT });
 
-  const activeUsers = await User.countDocuments({
-    role: Role.USER,
-    status: "ACTIVE",
-    verified: "VERIFIED",
-  });
+   const activeUsers = await User.countDocuments({
+     role: Role.USER,
+     status: UserStatus.ACTIVE,
+     verified: verifyStatus.VERIFIED,
+   });
 
-  const pendingApproval = await User.countDocuments({
-    role: Role.USER,
-    verified: "PENDING",
-  });
+   const pendingApproval = await User.countDocuments({
+     role: Role.USER,
+     verified: verifyStatus.PENDING,
+   });
 
-  const suspendedUsers = await User.countDocuments({
-    role: Role.USER,
-    status: { $in: ["SUSPENDED", "BLOCKED"] },
-  });
+   const suspendedUsers = await User.countDocuments({
+     role: Role.USER,
+     status: { $in: [UserStatus.SUSPENDED, UserStatus.BLOCKED] },
+   });
 
   // Transactions
   const totalTransactions = await Transaction.countDocuments();

@@ -12,7 +12,7 @@ import {
   uploadBufferToCloudinary,
 } from "../../config/cloudinary.config";
 import envConfig from "../../config/env";
-import { TransactionType } from "../transaction/transaction.constant";
+import { TransactionType, TransactionStatus } from "../transaction/transaction.constant";
 import { QueryBuilder } from "../../utils/QueryBuilders";
 import { userSearchableFields } from "../../../constants";
 import { INITIAL_BALANCE } from "../wallet/wallet.constant";
@@ -113,7 +113,7 @@ const createUser = async (
           sender: null,
           receiver: newUser[0]._id,
           amount: INITIAL_BALANCE,
-          status: "success",
+           status: TransactionStatus.SUCCESS,
           notes: "Initial balance on registration",
         },
       ],
